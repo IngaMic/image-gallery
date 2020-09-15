@@ -6,3 +6,9 @@ module.exports.getCard = () => {
         SELECT * FROM images`
     );
 };
+module.exports.addInfo = (title, description, username, file) => {
+    return db.query(`
+    INSERT INTO images (title, description, username, file)
+    VALUES ($1, $2, $3, $4) RETURNING id `, [title, description, username, file]
+    );
+};

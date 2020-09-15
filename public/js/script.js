@@ -6,6 +6,11 @@
         el: "main",
         data: {
             images: [],
+            //values of input field:
+            title: "",
+            description: "",
+            username: "",
+            file: null,
             //subHeading: "This is a subheading",// I will render it on the screen
             //cuteAnimals: ["giraffe", "capybara", "quoka", "penguin"],
         },
@@ -16,7 +21,7 @@
             //console.log("mounted is running");
             // $.ajax() - we have to find a way to do this without jquery. answer - use axios (we already have a link in our html)
 
-            console.log("this", this); //this refers to vue, but it will absolutelly different than the one in a nested scope = look_down
+            //console.log("this", this); //this refers to vue, but it will absolutelly different than the one in a nested scope = look_down
             // this.heading = "giraffes are ok-ish"//rewriting the heading; manipulate data
             //that is why we create a variable "that" for "this" outside of nested scope: "that" variable will not change it's value like "this" do
             var that = this;
@@ -27,12 +32,31 @@
                 //console.log("that :", that);
                 that.images = resp.data.images;
                 //we get info from the server
-
             }).catch(function (err) {
                 console.log("err in axios GET script.js", err);
             });
+        },
+        methods: {
+            handleClick: function (e) {
+                e.preventDefault();
+                console.log("this : ", this);
+                var formData = new FormData();
+                formData.append("title", this.title);
+                formData.append("description", this.description);
+                formData.append("username", this.username);
+                formData.append("file", this.file);
 
-
+                axios.post("/upload", formData).then(function (resp) {
+                    console.log("response from formData", resp);
+                }).catch(function (err) {
+                    console.log("error in axios post", err);
+                });
+            },
+            handleChange: function (e) {
+                console.log("handle change is running");
+                console.log("e.target.files[0]", e.target.files[0]);
+                this.file = e.target.files[0];
+            }
         },
     });
 

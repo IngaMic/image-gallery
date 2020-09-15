@@ -1,4 +1,45 @@
-body {
+main {
     margin: 0;
-    box-sizing: border-box;
+    background-color: lightgray;
+}
+.container {
+    background-color: gray;
+    width: 96%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 0 auto;
+    grid-gap: 20px;
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: rgb(75, 71, 71);
+    position: relative;
+    top: 0;
+    text-align: center;
+    align-items: center;
+    margin: 15px 10px;
+}
+img {
+    margin-top: 15px;
+    max-width: 90%;
+    overflow: hidden;
+}
+
+@media only screen and (max-width: 450px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
+@media only screen and (max-width: 850px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }  
+}
+
+img:hover {
+    top: -2px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
