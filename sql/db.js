@@ -3,12 +3,13 @@ var db = spicedPg('postgres:postgres:postgres@localhost:5432/images');
 
 module.exports.getCard = () => {
     return db.query(`
-        SELECT * FROM images`
+        SELECT * FROM images
+        ORDER by id DESC`
     );
 };
-module.exports.addInfo = (title, description, username, file) => {
+module.exports.addInfo = (url, title, description, username) => {
     return db.query(`
-    INSERT INTO images (title, description, username, file)
-    VALUES ($1, $2, $3, $4) RETURNING id `, [title, description, username, file]
+    INSERT INTO images (url, title, description, username)
+    VALUES ($1, $2, $3, $4) RETURNING * `, [url, title, description, username]
     );
 };
