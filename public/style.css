@@ -58,9 +58,12 @@ button {
   margin: 5px;
   font-size: 10px bold;
 }
+li {
+  text-align: left;
+}
 .first {
     padding-top: 15px;
-    height: 500px;
+    height: auto;
     width: 400px;
     background-color: #f5e7c5;
     left: 200px;

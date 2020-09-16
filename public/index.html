@@ -27,12 +27,14 @@
         </div>
         <!-- <p v-else>nothing to show atm</p> -->
         <!--:title="title" :description="description" :username="username" :url="url" -->
-        <first :id="id" v-if="showModal">
+        <first :id="id" v-if="showModal" @close="closeModal">
         </first>
     </main>
     <script id="first" type="text/x-template">
         <div class="first">
-             <button @click="closeClick">X</button>
+
+            <button @click="closeClick">X</button> 
+             <!-- <button v-on:event_first="eventFirst">X</button> -->
             <p>{{id}}</p>
             <p>{{heading}}</p>
              <img :src="url">

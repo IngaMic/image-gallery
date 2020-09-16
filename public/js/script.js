@@ -59,9 +59,11 @@
                     console.log("error in axios post comment", err);
                 });
             },
+
             closeClick: function (e) {
                 e.preventDefault();
                 console.log("you are trying to close me!");
+                this.$emit('close');
                 // an X button =  this.$emit ; showModal set to false in Vue instance
             },
         },
@@ -144,6 +146,11 @@
                 // });
 
                 this.showModal = true;
+            },
+
+            closeModal: function () {
+                console.log("message from main view instance modal wants to be closed")
+                this.showModal = false;
             },
         },
     });
