@@ -37,7 +37,7 @@
                 that.username = image.username;
                 that.description = image.description;
                 that.comments = comments;
-                console.log("that here", that);
+                //console.log("that here", that);
             }).catch(function (err) {
                 console.log("error in axios GET images/id", err);
             });
@@ -46,15 +46,19 @@
             handleClick: function (e) {
                 e.preventDefault();
                 console.log("this.name", this.name);
+                var that = this;
                 console.log("this.comment", this.comment);
                 var message = {
-                    name: this.name,
-                    comment: this.comment,
-                    image_id: this.id,
+                    name: that.name,
+                    comment: that.comment,
+                    image_id: that.id,
                 }
                 //console.log("message :", message);
                 axios.post("/comment", message).then(function (resp) {
-                    console.log("response", resp);
+                    //console.log("response ..........", resp.data.comment);
+                    console.log("comments..........", that.comments)
+                    var newComment = resp.data.comment;
+                    that.comments.unshift(newComment);
                 }).catch(function (err) {
                     console.log("error in axios post comment", err);
                 });
@@ -111,10 +115,11 @@
                 formData.append("description", this.description);
                 formData.append("username", this.username);
                 formData.append("file", this.file);
-
+                var that = this;
                 axios.post("/upload", formData).then(function (resp) {
-
                     console.log("response from formData", resp);
+                    var newImg = resp.data.img;
+                    that.images.unshift(newImg);
                 }).catch(function (err) {
                     console.log("error in axios post", err);
                 });
@@ -125,31 +130,12 @@
                 this.file = e.target.files[0];
             },
             handleClickBig: function (id) {
-                //console.log("handleClickBig!!!");
                 // get image id:
                 this.id = id;
-
-                // axios.get("/images/" + this.id).then(function (resp) {
-                //     // console.log("response from post image", resp);
-                //     // console.log("resp.data.img", resp.data.img);
-                //     //console.log("this", this);
-                //     var image = resp.data.img;
-                //     var comments = resp.data.comments;
-                //     that.id = image.id;
-                //     that.url = image.url;
-                //     that.title = image.title;
-                //     that.username = image.username;
-                //     that.description = image.description;
-                //     that.comments = comments;
-                // }).catch(function (err) {
-                //     console.log("error in axios GET images/id", err);
-                // });
-
                 this.showModal = true;
             },
-
             closeModal: function () {
-                console.log("message from main view instance modal wants to be closed")
+                //console.log("message from main view instance modal wants to be closed")
                 this.showModal = false;
             },
         },

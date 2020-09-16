@@ -71,3 +71,7 @@ li {
     position: fixed;
     text-align: center;
 }
+#x {
+  float: right;
+  margin: 10px;
+}

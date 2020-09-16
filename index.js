@@ -43,8 +43,8 @@ app.get("/images/:id", (req, res) => {
     console.log("req.params from index.js", req.params)
     db.getImg(req.params.id).then((result) => {
         //console.log("result from getImg", result);
-        console.log("result.rows[0]", result.rows[0]);
-        console.log("result.rows[0].id", result.rows[0].id);
+        //console.log("result.rows[0]", result.rows[0]);
+        //console.log("result.rows[0].id", result.rows[0].id);
         var img = result.rows[0];
         db.getComments(result.rows[0].id).then((list) => {
             var comments = list.rows;
@@ -78,19 +78,8 @@ app.post("/comment", (req, res) => {
         res.json({
             comment: rows[0],
         });
-    }).catch((err) => { console.log("err n addInfo index.js", err) });
+    }).catch((err) => { console.log("err in addInfo index.js", err) });
 });
 
-app.post("/comment", (req, res) => {
-    console.log("file :", req.file);
-    //     // const comment = req. ;
-    //     // const name =  req. ;
-    //     db.addComment(req.body.comment, req.body.name).then(({ rows }) => {
-    //         console.log(" rows from addComments.then : ", rows);
-    //         res.json({
-    //             comment: rows[0],
-    //         });
-    //     }).catch((err) => { console.log("err n addInfo index.js", err) });
-});
 
 app.listen(8080, () => console.log("server is listening..."));

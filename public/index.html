@@ -32,11 +32,9 @@
     </main>
     <script id="first" type="text/x-template">
         <div class="first">
-
+            <div id="x">
             <button @click="closeClick">X</button> 
-             <!-- <button v-on:event_first="eventFirst">X</button> -->
-            <p>{{id}}</p>
-            <p>{{heading}}</p>
+            </div>
              <img :src="url">
                 <p> {{title}}</p>
                 <ul v-if="comments.length > 0">
@@ -44,9 +42,9 @@
                 </ul>
                  <p v-else>no comments yet</p>
 
-            <h4>Leave a comment:</h4>
-            <input v-model="comment" type="text" name="comment" placeholder="comment">
-            <input v-model="name" type="text" name="name" placeholder="name">
+            <h5>Leave a comment:</h5>
+            <input v-model="comment" type="text" name="comment" placeholder="comment" required>
+            <input v-model="name" type="text" name="name" placeholder="name" required>
             <button @click="handleClick">Submit</button>
 
         </div>
