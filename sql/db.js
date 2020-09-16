@@ -13,3 +13,26 @@ module.exports.addInfo = (url, title, description, username) => {
     VALUES ($1, $2, $3, $4) RETURNING * `, [url, title, description, username]
     );
 };
+//store comment in a new comments table
+//new comment will go up  ORDER by id DESC`  // adding a comment works just like file
+module.exports.addComment = (comment, username, image_id) => {
+    return db.query(`
+    INSERT INTO comments (comment, username, image_id)
+    VALUES ($1, $2, $3) RETURNING *`, [comment, username, image_id]
+    );
+};
+module.exports.getImg = (id) => {
+    return db.query(`
+        SELECT * FROM images
+        WHERE id = ($1)`, [id]
+    );
+};
+module.exports.getComments = (id) => {
+    return db.query(`
+        SELECT * FROM comments
+        WHERE image_id = ($1)
+        ORDER by id DESC`, [id]
+    );
+};
+
+

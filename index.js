@@ -7,6 +7,7 @@ const uidSafe = require('uid-safe');
 const path = require('path');
 const { s3Url } = require("./config.json");
 app.use(express.static("public"));
+app.use(express.json());
 //////////////No changes here ////////////////////////////////////
 const diskStorage = multer.diskStorage({
     destination: function (req, file, callback) {
@@ -38,6 +39,25 @@ app.get("/images", (req, res) => {
     }).catch((err) => { console.log("err in getCard get /images"), err });
 });
 
+app.get("/images/:id", (req, res) => {
+    console.log("req.params from index.js", req.params)
+    db.getImg(req.params.id).then((result) => {
+        //console.log("result from getImg", result);
+        console.log("result.rows[0]", result.rows[0]);
+        console.log("result.rows[0].id", result.rows[0].id);
+        var img = result.rows[0];
+        db.getComments(result.rows[0].id).then((list) => {
+            var comments = list.rows;
+            console.log("comments", comments);
+            res.json({
+                img,
+                comments,
+            });
+
+        }).catch((err) => { console.log("err in getComments get /img", err) });
+
+    }).catch((err) => { console.log("err in getImg get /img", err) });
+});
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     // console.log("file :", req.file);
@@ -49,17 +69,28 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
             image: rows[0],
         });
     }).catch((err) => { console.log("err n addInfo index.js", err) });
+});
 
-    // console.log("input - req.body :", req.body);
-    // if (req.file) {
-    //     res.json({
-    //         success: true
-    //     });
-    // } else {
-    //     res.json({
-    //         success: false
-    //     });
-    // }
+app.post("/comment", (req, res) => {
+    console.log("req.body :", req.body);
+    db.addComment(req.body.comment, req.body.name, req.body.image_id).then(({ rows }) => {
+        console.log(" rows from addComments.then : ", rows);
+        res.json({
+            comment: rows[0],
+        });
+    }).catch((err) => { console.log("err n addInfo index.js", err) });
+});
+
+app.post("/comment", (req, res) => {
+    console.log("file :", req.file);
+    //     // const comment = req. ;
+    //     // const name =  req. ;
+    //     db.addComment(req.body.comment, req.body.name).then(({ rows }) => {
+    //         console.log(" rows from addComments.then : ", rows);
+    //         res.json({
+    //             comment: rows[0],
+    //         });
+    //     }).catch((err) => { console.log("err n addInfo index.js", err) });
 });
 
 app.listen(8080, () => console.log("server is listening..."));

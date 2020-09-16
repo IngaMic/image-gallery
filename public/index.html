@@ -19,13 +19,36 @@
         </form>
         <!-- <div v-if="images.length > 0"> -->
         <div class="container">
-            <div class="card" v-for="image in images">
+            <div class="card" v-for="image in images" @click="handleClickBig(image.id)">
                 <img :src="image.url">
                 <p> {{image.title}}</p>
+                <p>{{image.id}}</p>
             </div>
         </div>
         <!-- <p v-else>nothing to show atm</p> -->
+        <!--:title="title" :description="description" :username="username" :url="url" -->
+        <first :id="id" v-if="showModal">
+        </first>
     </main>
+    <script id="first" type="text/x-template">
+        <div class="first">
+             <button @click="closeClick">X</button>
+            <p>{{id}}</p>
+            <p>{{heading}}</p>
+             <img :src="url">
+                <p> {{title}}</p>
+                <ul v-if="comments.length > 0">
+                    <li v-for="message in comments" >{{message.comment}} {{message.username}}</li>
+                </ul>
+                 <p v-else>no comments yet</p>
+
+            <h4>Leave a comment:</h4>
+            <input v-model="comment" type="text" name="comment" placeholder="comment">
+            <input v-model="name" type="text" name="name" placeholder="name">
+            <button @click="handleClick">Submit</button>
+
+        </div>
+    </script>
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="js/script.js"></script>

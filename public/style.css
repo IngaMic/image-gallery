@@ -8,7 +8,7 @@ main {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 0 auto;
-    grid-gap: 20px;
+    grid-gap: 5px;
 }
 .card {
     display: flex;
@@ -21,11 +21,13 @@ main {
     text-align: center;
     align-items: center;
     margin: 15px 10px;
+    border-radius: 5px;
 }
 img {
     margin-top: 15px;
     max-width: 90%;
     overflow: hidden;
+    border-radius: 5px;
 }
 
 @media only screen and (max-width: 450px) {
@@ -37,9 +39,32 @@ img {
   .container {
     grid-template-columns: 1fr 1fr;
   }  
+  card {
+    width: 96%;
+  }
 }
 
-img:hover {
+.card:hover {
     top: -2px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+input {
+  border-radius: 5px;
+  margin: 5px;
+  font-size: 10px bold;
+}
+button {
+   border-radius: 5px;
+  margin: 5px;
+  font-size: 10px bold;
+}
+.first {
+    padding-top: 15px;
+    height: 500px;
+    width: 400px;
+    background-color: #f5e7c5;
+    left: 200px;
+    top: 100px;
+    position: fixed;
+    text-align: center;
 }

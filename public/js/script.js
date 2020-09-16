@@ -1,16 +1,85 @@
 (function () {
     //no arrow func, no let, no const, no ES6, no destructuring, spreading...
-    //Thus, we are going to use the promisses.
+    //Thus, we are going to use the promisses.  
+    //how to render a component will go here:
+    Vue.component("first", {
+        template: "#first",
+        props: ["id"], // value is always an array. ,"title", "description", "username", "url"
+        data: function () {
+            return {
+                heading: "components components...",
+                comments: [],
+                title: "",
+                description: "",
+                username: "",
+                file: null,
+                id: null,
+                comment: "",
+                name: "",
+            };
+        },
+        mounted: function () {
+            //console.log("component has mounted");
+            //console.log("this in component :", this);
+            //console.log("this.id", this.id); // working
+            var that = this;
+            //axios to make a req to the server to get some data:
+            axios.get("/images/" + this.id).then(function (resp) {
+                // console.log("response from post image", resp);
+                // console.log("resp.data.img", resp.data.img);
+                var image = resp.data.img;
+                var comments = resp.data.comments;
+                console.log("we are here", comments);
+                that.id = image.id;
+                that.url = image.url;
+                //console.log("this.url", this.url);
+                that.title = image.title;
+                that.username = image.username;
+                that.description = image.description;
+                that.comments = comments;
+                console.log("that here", that);
+            }).catch(function (err) {
+                console.log("error in axios GET images/id", err);
+            });
+        },
+        methods: {
+            handleClick: function (e) {
+                e.preventDefault();
+                console.log("this.name", this.name);
+                console.log("this.comment", this.comment);
+                var message = {
+                    name: this.name,
+                    comment: this.comment,
+                    image_id: this.id,
+                }
+                //console.log("message :", message);
+                axios.post("/comment", message).then(function (resp) {
+                    console.log("response", resp);
+                }).catch(function (err) {
+                    console.log("error in axios post comment", err);
+                });
+            },
+            closeClick: function (e) {
+                e.preventDefault();
+                console.log("you are trying to close me!");
+                // an X button =  this.$emit ; showModal set to false in Vue instance
+            },
+        },
+    });
+
     // a constructor called vue:
     new Vue({
         el: "main",
         data: {
+            // props - just like React
             images: [],
             //values of input field:
             title: "",
             description: "",
             username: "",
             file: null,
+            id: null,
+            showModal: false,
         },
         mounted: function () {
             //lifecycle method
@@ -34,7 +103,7 @@
         methods: {
             handleClick: function (e) {
                 e.preventDefault();
-                console.log("this : ", this);
+                //console.log("this : ", this);
                 var formData = new FormData();
                 formData.append("title", this.title);
                 formData.append("description", this.description);
@@ -52,7 +121,30 @@
                 //console.log("handle change is running");
                 console.log("e.target.files[0]", e.target.files[0]);
                 this.file = e.target.files[0];
-            }
+            },
+            handleClickBig: function (id) {
+                //console.log("handleClickBig!!!");
+                // get image id:
+                this.id = id;
+
+                // axios.get("/images/" + this.id).then(function (resp) {
+                //     // console.log("response from post image", resp);
+                //     // console.log("resp.data.img", resp.data.img);
+                //     //console.log("this", this);
+                //     var image = resp.data.img;
+                //     var comments = resp.data.comments;
+                //     that.id = image.id;
+                //     that.url = image.url;
+                //     that.title = image.title;
+                //     that.username = image.username;
+                //     that.description = image.description;
+                //     that.comments = comments;
+                // }).catch(function (err) {
+                //     console.log("error in axios GET images/id", err);
+                // });
+
+                this.showModal = true;
+            },
         },
     });
 })();
