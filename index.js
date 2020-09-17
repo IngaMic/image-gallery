@@ -44,17 +44,17 @@ app.get("/images", (req, res) => {
     }).catch((err) => { console.log("err in getCard get /images"), err });
 });
 
-app.get("/moreimages/:lowestId", (req, res) => {
+app.get("/moreimages/:topId", (req, res) => {
     //console.log("req.params from index.js", req.params.lowestID);
-    var lastId = req.params.lowestId;
-    db.getMoreImages(lastId).then((result) => {
+    var topId = req.params.topId;
+    db.getMoreImages(topId).then((result) => {
         //console.log("result from getmoreImages", result);
         var images = result.rows;
         console.log("images", images)
         res.json({
             images,
         });
-    }).catch((err) => { console.log("err in getCard get /moreimages"), err });
+    }).catch((err) => { console.log("err in getMoreImages get /moreimages"), err });
 });
 
 app.get("/images/:imageId", (req, res) => {

@@ -13,7 +13,7 @@
                 description: "",
                 username: "",
                 file: null,
-                //id: null,
+                topId: null,
                 comment: "",
                 name: "",
                 url: ""
@@ -52,8 +52,8 @@
                     // console.log("response from post image", resp);
                     //..if theres nothing with that this.id, just close the Modal
                     //if it's an err, u can handle that in your catches
-
-
+                    //////////////////////////////////work here next
+                    //////////////////////////////////
                     // console.log("resp.data.img", resp.data.img);
 
 
@@ -105,6 +105,8 @@
         },
     });
 
+
+
     // a constructor called vue:
     new Vue({
         el: "main",
@@ -116,9 +118,10 @@
             description: "",
             username: "",
             file: null,
-            //id: null,
+            topId: null,
             imageId: location.hash.slice(1),
             lowestId: null,
+            load: true,
         },
         mounted: function () {
             //lifecycle method
@@ -137,6 +140,9 @@
                 that.images = resp.data.images;
                 that.lowestId = resp.data.lowestId;
                 lowestId = resp.data.lowestId;
+                console.log("that.images", that.images);
+                topId = that.images[that.images.length - 1].id;
+                console.log(" topId", topId);
             }).catch(function (err) {
                 console.log("err in axios GET script.js", err);
             });
@@ -160,6 +166,7 @@
                 axios.post("/upload", formData).then(function (resp) {
                     console.log("response from formData", resp);
                     var newImg = resp.data.img;
+                    console.log("newImg", newImg);
                     that.images.unshift(newImg);
                 }).catch(function (err) {
                     console.log("error in axios post", err);
@@ -177,26 +184,43 @@
             // },
             closeModal: function () {
                 this.imageId = null;
-                location.hash = ""; //console drops = Invalid left-hand side in assignment
-                //console.log("message from main view instance modal wants to be closed", this.imageId);
+                location.hash = "";
+
+            },
+            removeButton: function () {
+                load = false;
             },
             moreClick: function (e) {
                 e.preventDefault();
                 // this.images = images;
-                console.log("this.lowestId in moreClick method", this.lowestId); // working
+                //console.log("this.lowestId in moreClick method", this.lowestId); // working
                 lowestId = this.lowestId;
                 //console.log("lowestId", lowestId); //working
                 var that = this;
-                axios.get("/moreimages/" + lowestId).then(function (resp) {
-                    console.log("the response to script.js from the server", resp);
+                axios.get("/moreimages/" + topId).then(function (resp) {
+                    //console.log("the response to script.js from the server", resp);
                     newImages = resp.data.images;
                     console.log("newImages", newImages);
+                    topId = newImages[newImages.length - 1].id;
+                    //console.log("newImages", newImages[5].id);
+                    for (var i = 0; i < newImages.length; i++) {
+                        if (newImages[0].lowestId == newImages[i].id) {
+                            console.log("lowest id on a screen");
+                            load = false;
+                            ///////////////////////////////////////////////////////
+                            /////////////working here//////////////////////////
+                            /////////////////////////////////////////////////
+                        }
+                    }
                     for (var i of newImages) {
                         that.images.push(i);
                     }
-                    console.log("that.images", that.images);
+
+
+                    //console.log("that.images", that.images);
                 }).catch(function (err) {
                     console.log("err in axios GET moreimages script.js", err);
+                    load = false;
                 });
             }
         },

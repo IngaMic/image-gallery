@@ -44,14 +44,29 @@ module.exports.getComments = (id) => {
 
     );
 };
-module.exports.getMoreImages = (lastId) => {
+module.exports.getMoreImages = (topId) => {
     return db.query(
-        `SELECT * FROM images
-        WHERE id > ($1)
+        `SELECT url, title, id, (
+            
+        SELECT id FROM images
+        ORDER BY id ASC
+        LIMIT 1
+        ) AS "lowestId" FROM images
+
+        WHERE id < ($1)
         ORDER BY id DESC
-        LIMIT 6`,
-        [lastId]
+        LIMIT 6;
+        `,
+        [topId]
     );
 };
 
-
+// module.exports.getMoreImages = (topId) => {
+//     return db.query(
+//         `SELECT * FROM images
+//         WHERE id < ($1)
+//         ORDER BY id DESC
+//         LIMIT 6`,
+//         [topId]
+//     );
+// };
