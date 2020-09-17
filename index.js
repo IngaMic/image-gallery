@@ -33,15 +33,33 @@ app.get("/images", (req, res) => {
     db.getCard().then((result) => {
         //console.log("result from getCard", result);
         var images = result.rows;
-        res.json({
-            images,
-        });
+        db.getlowestId().then((ind) => {
+            console.log("ind.rows[0].id", ind.rows[0].id);
+            var lowestId = ind.rows[0].id;
+            res.json({
+                images,
+                lowestId,
+            });
+        }).catch((err) => { console.log("err in getlowestId get /images"), err });
     }).catch((err) => { console.log("err in getCard get /images"), err });
 });
 
-app.get("/images/:id", (req, res) => {
-    console.log("req.params from index.js", req.params)
-    db.getImg(req.params.id).then((result) => {
+app.get("/moreimages/:lowestId", (req, res) => {
+    //console.log("req.params from index.js", req.params.lowestID);
+    var lastId = req.params.lowestId;
+    db.getMoreImages(lastId).then((result) => {
+        //console.log("result from getmoreImages", result);
+        var images = result.rows;
+        console.log("images", images)
+        res.json({
+            images,
+        });
+    }).catch((err) => { console.log("err in getCard get /moreimages"), err });
+});
+
+app.get("/images/:imageId", (req, res) => {
+    //console.log("req.params from index.js", req.params)
+    db.getImg(req.params.imageId).then((result) => {
         //console.log("result from getImg", result);
         //console.log("result.rows[0]", result.rows[0]);
         //console.log("result.rows[0].id", result.rows[0].id);

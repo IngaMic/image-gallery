@@ -4,7 +4,7 @@
     //how to render a component will go here:
     Vue.component("first", {
         template: "#first",
-        props: ["id"], // value is always an array. ,"title", "description", "username", "url"
+        props: ["imageId"], // value is always an array. ,"title", "description", "username", "url"
         data: function () {
             return {
                 heading: "components components...",
@@ -13,9 +13,10 @@
                 description: "",
                 username: "",
                 file: null,
-                id: null,
+                //id: null,
                 comment: "",
                 name: "",
+                url: ""
             };
         },
         mounted: function () {
@@ -24,13 +25,13 @@
             //console.log("this.id", this.id); // working
             var that = this;
             //axios to make a req to the server to get some data:
-            axios.get("/images/" + this.id).then(function (resp) {
-                // console.log("response from post image", resp);
-                // console.log("resp.data.img", resp.data.img);
+            axios.get("/images/" + this.imageId).then(function (resp) {
+                //console.log("response from get image", resp);
+                //console.log("resp.data.img", resp.data.img);
                 var image = resp.data.img;
                 var comments = resp.data.comments;
                 console.log("we are here", comments);
-                that.id = image.id;
+                that.imageId = image.id;
                 that.url = image.url;
                 //console.log("this.url", this.url);
                 that.title = image.title;
@@ -42,6 +43,37 @@
                 console.log("error in axios GET images/id", err);
             });
         },
+        watch: {
+            imageId: function () {
+                //console.log("image imageId changed");
+                //exactly the same that mounted does: when id changes image and comments changes
+                var that = this;
+                axios.get("/images/" + that.imageId).then(function (resp) {
+                    // console.log("response from post image", resp);
+                    //..if theres nothing with that this.id, just close the Modal
+                    //if it's an err, u can handle that in your catches
+
+
+                    // console.log("resp.data.img", resp.data.img);
+
+
+                    var image = resp.data.img;
+                    var comments = resp.data.comments;
+                    console.log("we are here", comments);
+                    that.imageId = image.id;
+                    that.url = image.url;
+                    //console.log("this.url", this.url);
+                    that.title = image.title;
+                    that.username = image.username;
+                    that.description = image.description;
+                    that.comments = comments;
+                    //console.log("that here", that);
+                }).catch(function (err) {
+                    console.log("error in axios GET images/id", err);
+                });
+
+            }
+        },
         methods: {
             handleClick: function (e) {
                 e.preventDefault();
@@ -51,12 +83,12 @@
                 var message = {
                     name: that.name,
                     comment: that.comment,
-                    image_id: that.id,
+                    image_id: that.imageId,
                 }
                 //console.log("message :", message);
                 axios.post("/comment", message).then(function (resp) {
                     //console.log("response ..........", resp.data.comment);
-                    console.log("comments..........", that.comments)
+                    //console.log("comments..........", that.comments)
                     var newComment = resp.data.comment;
                     that.comments.unshift(newComment);
                 }).catch(function (err) {
@@ -66,8 +98,8 @@
 
             closeClick: function (e) {
                 e.preventDefault();
-                console.log("you are trying to close me!");
-                this.$emit('close');
+                // console.log("you are trying to close me!");
+                this.$emit("close-it");
                 // an X button =  this.$emit ; showModal set to false in Vue instance
             },
         },
@@ -84,8 +116,9 @@
             description: "",
             username: "",
             file: null,
-            id: null,
-            showModal: false,
+            //id: null,
+            imageId: location.hash.slice(1),
+            lowestId: null,
         },
         mounted: function () {
             //lifecycle method
@@ -102,8 +135,16 @@
                 // console.log("this", this); // it's stops refering to vue and starts refering to a window and stops being useful in nested functions. refers to a global orject instead of vue
                 //console.log("that :", that);
                 that.images = resp.data.images;
+                that.lowestId = resp.data.lowestId;
+                lowestId = resp.data.lowestId;
             }).catch(function (err) {
                 console.log("err in axios GET script.js", err);
+            });
+            window.addEventListener("hashchange", function () {
+                //console.log("hash changed");
+                that.imageId = location.hash.slice(1);
+                //console.log("imageId", imageId);
+
             });
         },
         methods: {
@@ -129,15 +170,35 @@
                 console.log("e.target.files[0]", e.target.files[0]);
                 this.file = e.target.files[0];
             },
-            handleClickBig: function (id) {
-                // get image id:
-                this.id = id;
-                this.showModal = true;
-            },
+            // handleClickBig: function (id) {
+            //     // get image id:
+            //     this.id = id;
+            //     this.id = id;
+            // },
             closeModal: function () {
-                //console.log("message from main view instance modal wants to be closed")
-                this.showModal = false;
+                this.imageId = null;
+                location.hash = ""; //console drops = Invalid left-hand side in assignment
+                //console.log("message from main view instance modal wants to be closed", this.imageId);
             },
+            moreClick: function (e) {
+                e.preventDefault();
+                // this.images = images;
+                console.log("this.lowestId in moreClick method", this.lowestId); // working
+                lowestId = this.lowestId;
+                //console.log("lowestId", lowestId); //working
+                var that = this;
+                axios.get("/moreimages/" + lowestId).then(function (resp) {
+                    console.log("the response to script.js from the server", resp);
+                    newImages = resp.data.images;
+                    console.log("newImages", newImages);
+                    for (var i of newImages) {
+                        that.images.push(i);
+                    }
+                    console.log("that.images", that.images);
+                }).catch(function (err) {
+                    console.log("err in axios GET moreimages script.js", err);
+                });
+            }
         },
     });
 })();

@@ -4,7 +4,15 @@ var db = spicedPg('postgres:postgres:postgres@localhost:5432/images');
 module.exports.getCard = () => {
     return db.query(`
         SELECT * FROM images
-        ORDER by id DESC`
+        ORDER by id DESC
+        LIMIT 6`
+    );
+};
+module.exports.getlowestId = () => {
+    return db.query(`
+        SELECT id FROM images
+        ORDER BY id ASC
+        LIMIT 1`
     );
 };
 module.exports.addInfo = (url, title, description, username) => {
@@ -31,7 +39,18 @@ module.exports.getComments = (id) => {
     return db.query(`
         SELECT * FROM comments
         WHERE image_id = ($1)
-        ORDER by id DESC`, [id]
+        ORDER by id DESC
+        LIMIT 6`, [id]
+
+    );
+};
+module.exports.getMoreImages = (lastId) => {
+    return db.query(
+        `SELECT * FROM images
+        WHERE id > ($1)
+        ORDER BY id DESC
+        LIMIT 6`,
+        [lastId]
     );
 };
 
