@@ -24,6 +24,9 @@
             axios.get("/images/" + this.imageId).then(function (resp) {
                 //console.log("response from get image", resp);
                 //console.log("resp.data.img", resp.data.img);
+                if (resp.data.length == 0) {
+                    that.$emit("close");
+                }
                 var image = resp.data.img;
                 var comments = resp.data.comments;
                 console.log("we are here", comments);
@@ -35,22 +38,36 @@
                 that.comments = comments;
             }).catch(function (err) {
                 console.log("error in axios GET images/id", err);
+                that.$emit("close");
             });
         },
         watch: {
             imageId: function () {
                 //exactly the same that mounted does: when id changes image and comments changes
                 var that = this;
+
+
+                // if (imageId != that.images.id) {
+                //     that.$emit("close");
+                // }
+
+
                 axios.get("/images/" + that.imageId).then(function (resp) {
-                    // console.log("response from post image", resp);
+                    console.log("response from post image", resp);
+
                     //..if theres nothing with that this.id, just close the Modal
                     //if it's an err, u can handle that in your catches
-                    //////////////////////////////////work here next
-                    //////////////////////////////////
-                    // console.log("resp.data.img", resp.data.img);
-                    if ()
-
-                        var image = resp.data.img;
+                    //////////////////////////////////////////////////////////////
+                    //////////////////////////////////work here next////////////
+                    /////////////////////////////////////////////////////////////
+                    // console.log("resp.data.img", resp.data);
+                    // if (resp.data.error == noImg) {
+                    //     that.$emit("close");
+                    // }
+                    if (resp.data.length == 0) {
+                        that.$emit("close");
+                    }
+                    var image = resp.data.img;
                     var comments = resp.data.comments;
                     console.log("we are here", comments);
                     that.imageId = image.id;
@@ -62,7 +79,9 @@
                     that.comments = comments;
                     //console.log("that here", that);
                 }).catch(function (err) {
+                    //console.log("response from post image in catch", resp);
                     console.log("error in axios GET images/id", err);
+                    that.$emit("close");
                 });
 
             }
@@ -175,6 +194,7 @@
                 this.file = e.target.files[0];
             },
             closeModal: function () {
+                console.log("I am about to close");
                 this.imageId = null;
                 location.hash = "";
             },

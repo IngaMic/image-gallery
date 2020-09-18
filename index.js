@@ -34,7 +34,7 @@ app.get("/images", (req, res) => {
         //console.log("result from getCard", result);
         var images = result.rows;
         db.getlowestId().then((ind) => {
-            console.log("ind.rows[0].id", ind.rows[0].id);
+            //console.log("ind.rows[0].id", ind.rows[0].id);
             var lowestId = ind.rows[0].id;
             res.json({
                 images,
@@ -73,8 +73,13 @@ app.get("/images/:imageId", (req, res) => {
             });
 
         }).catch((err) => { console.log("err in getComments get /img", err) });
+    }).catch((err) => {
+        console.log("err in getImg get /img", err);
+        res.json({
+            error: "invalid id",
+        });
+    });
 
-    }).catch((err) => { console.log("err in getImg get /img", err) });
 });
 
 app.post("/delete/:imageId", (req, res) => {
