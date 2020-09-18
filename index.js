@@ -50,7 +50,7 @@ app.get("/moreimages/:topId", (req, res) => {
     db.getMoreImages(topId).then((result) => {
         //console.log("result from getmoreImages", result);
         var images = result.rows;
-        console.log("images", images)
+        //console.log("images", images)
         res.json({
             images,
         });
@@ -66,7 +66,7 @@ app.get("/images/:imageId", (req, res) => {
         var img = result.rows[0];
         db.getComments(result.rows[0].id).then((list) => {
             var comments = list.rows;
-            console.log("comments", comments);
+            //console.log("comments", comments);
             res.json({
                 img,
                 comments,
@@ -77,12 +77,24 @@ app.get("/images/:imageId", (req, res) => {
     }).catch((err) => { console.log("err in getImg get /img", err) });
 });
 
+app.post("/delete/:imageId", (req, res) => {
+    console.log("req.params.imageId", req.params.imageId);
+    db.deleteImgComments(req.params.imageId).then(() => {
+        db.deleteImg(req.params.imageId).then(() => {
+            res.json({
+                success: "success",
+                imageId: req.params.imageId,
+            });
+        }).catch((err) => { console.log("err n deleteInfo index.js", err) });
+    }).catch((err) => { console.log("err n deleteInfo index.js", err) });
+});
+
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     // console.log("file :", req.file);
     const filename = req.file.filename;
     const url = `${s3Url}${filename}`////////////////////////////FIX IT
     db.addInfo(url, req.body.title, req.body.description, req.body.username).then(({ rows }) => {
-        console.log(" rows from addInfo.then : ", rows);
+        console.log(" rows from addInfo.then in index.js: ", rows);
         res.json({
             image: rows[0],
         });
@@ -90,9 +102,9 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 });
 
 app.post("/comment", (req, res) => {
-    console.log("req.body :", req.body);
+    //console.log("req.body :", req.body);
     db.addComment(req.body.comment, req.body.name, req.body.image_id).then(({ rows }) => {
-        console.log(" rows from addComments.then : ", rows);
+        //console.log(" rows from addComments.then : ", rows);
         res.json({
             comment: rows[0],
         });

@@ -7,7 +7,6 @@
         props: ["imageId"], // value is always an array. ,"title", "description", "username", "url"
         data: function () {
             return {
-                heading: "components components...",
                 comments: [],
                 title: "",
                 description: "",
@@ -20,9 +19,6 @@
             };
         },
         mounted: function () {
-            //console.log("component has mounted");
-            //console.log("this in component :", this);
-            //console.log("this.id", this.id); // working
             var that = this;
             //axios to make a req to the server to get some data:
             axios.get("/images/" + this.imageId).then(function (resp) {
@@ -33,19 +29,16 @@
                 console.log("we are here", comments);
                 that.imageId = image.id;
                 that.url = image.url;
-                //console.log("this.url", this.url);
                 that.title = image.title;
                 that.username = image.username;
                 that.description = image.description;
                 that.comments = comments;
-                //console.log("that here", that);
             }).catch(function (err) {
                 console.log("error in axios GET images/id", err);
             });
         },
         watch: {
             imageId: function () {
-                //console.log("image imageId changed");
                 //exactly the same that mounted does: when id changes image and comments changes
                 var that = this;
                 axios.get("/images/" + that.imageId).then(function (resp) {
@@ -55,9 +48,9 @@
                     //////////////////////////////////work here next
                     //////////////////////////////////
                     // console.log("resp.data.img", resp.data.img);
+                    if ()
 
-
-                    var image = resp.data.img;
+                        var image = resp.data.img;
                     var comments = resp.data.comments;
                     console.log("we are here", comments);
                     that.imageId = image.id;
@@ -84,28 +77,36 @@
                     name: that.name,
                     comment: that.comment,
                     image_id: that.imageId,
-                }
-                //console.log("message :", message);
+                };
                 axios.post("/comment", message).then(function (resp) {
-                    //console.log("response ..........", resp.data.comment);
-                    //console.log("comments..........", that.comments)
                     var newComment = resp.data.comment;
                     that.comments.unshift(newComment);
                 }).catch(function (err) {
                     console.log("error in axios post comment", err);
                 });
             },
-
             closeClick: function (e) {
                 e.preventDefault();
-                // console.log("you are trying to close me!");
-                this.$emit("close-it");
+                this.$emit("close");
                 // an X button =  this.$emit ; showModal set to false in Vue instance
             },
+            deleteClick: function (e) {
+                e.preventDefault();
+                var that = this;
+                axios.post("/delete/" + that.imageId).then(function (resp) {
+                    console.log("response from delete", resp.data.imageId);
+                    if (resp.data.success) {
+                        that.imageId = resp.data.imageId;
+                        that.$emit("delete", that.imageId);
+                        that.$emit("close");
+
+                    }
+                }).catch(function (err) {
+                    console.log("error in axios post delete in script.js", err);
+                });
+            }
         },
     });
-
-
 
     // a constructor called vue:
     new Vue({
@@ -134,23 +135,20 @@
             var that = this;
             axios.get("/images").then(function (resp) {
                 // resp = response from the server
-                //console.log("resp", resp.data.images); //resp has a property data that we have _up
+                console.log("resp", resp.data.images); //resp has a property data that we have _up
                 // console.log("this", this); // it's stops refering to vue and starts refering to a window and stops being useful in nested functions. refers to a global orject instead of vue
                 //console.log("that :", that);
                 that.images = resp.data.images;
                 that.lowestId = resp.data.lowestId;
                 lowestId = resp.data.lowestId;
-                console.log("that.images", that.images);
+                //console.log("that.images", that.images);
                 topId = that.images[that.images.length - 1].id;
-                console.log(" topId", topId);
+                //console.log(" topId", topId);
             }).catch(function (err) {
                 console.log("err in axios GET script.js", err);
             });
             window.addEventListener("hashchange", function () {
-                //console.log("hash changed");
                 that.imageId = location.hash.slice(1);
-                //console.log("imageId", imageId);
-
             });
         },
         methods: {
@@ -164,8 +162,8 @@
                 formData.append("file", this.file);
                 var that = this;
                 axios.post("/upload", formData).then(function (resp) {
-                    console.log("response from formData", resp);
-                    var newImg = resp.data.img;
+                    console.log("response from formData = I need it now", resp);
+                    var newImg = resp.data.image;
                     console.log("newImg", newImg);
                     that.images.unshift(newImg);
                 }).catch(function (err) {
@@ -173,54 +171,47 @@
                 });
             },
             handleChange: function (e) {
-                //console.log("handle change is running");
-                console.log("e.target.files[0]", e.target.files[0]);
+
                 this.file = e.target.files[0];
             },
-            // handleClickBig: function (id) {
-            //     // get image id:
-            //     this.id = id;
-            //     this.id = id;
-            // },
             closeModal: function () {
                 this.imageId = null;
                 location.hash = "";
-
             },
             removeButton: function () {
-                load = false;
+                this.load = false;
+            },
+            removeImg: function (id) {
+                for (var i = 0; i < this.images.length; i++) {
+                    if (this.images[i].id == id) {
+                        this.images.splice(i, 1);
+                    }
+                };
             },
             moreClick: function (e) {
                 e.preventDefault();
-                // this.images = images;
-                //console.log("this.lowestId in moreClick method", this.lowestId); // working
                 lowestId = this.lowestId;
                 //console.log("lowestId", lowestId); //working
                 var that = this;
                 axios.get("/moreimages/" + topId).then(function (resp) {
                     //console.log("the response to script.js from the server", resp);
                     newImages = resp.data.images;
-                    console.log("newImages", newImages);
+                    //console.log("newImages", newImages);
                     topId = newImages[newImages.length - 1].id;
                     //console.log("newImages", newImages[5].id);
                     for (var i = 0; i < newImages.length; i++) {
                         if (newImages[0].lowestId == newImages[i].id) {
-                            console.log("lowest id on a screen");
-                            load = false;
-                            ///////////////////////////////////////////////////////
-                            /////////////working here//////////////////////////
-                            /////////////////////////////////////////////////
+                            //console.log("lowest id on a screen");
+                            that.load = false;
                         }
                     }
                     for (var i of newImages) {
                         that.images.push(i);
                     }
-
-
                     //console.log("that.images", that.images);
                 }).catch(function (err) {
                     console.log("err in axios GET moreimages script.js", err);
-                    load = false;
+                    that.load = false;
                 });
             }
         },

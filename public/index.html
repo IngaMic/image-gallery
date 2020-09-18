@@ -26,15 +26,14 @@
                     <p> {{image.id}}</p>
                 </a>
             </div>
-
-
         </div>
-        <div id="more">
-            <button v-if="load" @click="moreClick">More</button>
+
+        <div v-if="load" id="more">
+            <button @click="moreClick">More</button>
         </div>
         <!-- <p v-else>nothing to show atm</p> -->
         <!--:title="title" :description="description" :username="username" :url="url" -->
-        <first :image-id="imageId" v-if="imageId" @close-it="closeModal">
+        <first :image-id="imageId" v-if="imageId" @close="closeModal" @delete="removeImg">
             <!-- there was a  showModal _up -->
         </first>
 
@@ -56,8 +55,9 @@
             <input v-model="name" type="text" name="name" placeholder="name" required>
             <button @click="handleClick">Submit</button>
 
-        </div>
-        
+
+  <button @click="deleteClick">Delete this Picture</button>
+        </div> 
     </script>
 
 
