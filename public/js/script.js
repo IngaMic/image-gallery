@@ -97,6 +97,8 @@
                 axios.post("/comment", message).then(function (resp) {
                     var newComment = resp.data.comment;
                     that.comments.unshift(newComment);
+                }).then(function () {
+                    that.clearCommentInput();
                 }).catch(function (err) {
                     console.log("error in axios post comment", err);
                 });
@@ -105,6 +107,10 @@
                 e.preventDefault();
                 this.$emit("close");
                 // an X button =  this.$emit ; showModal set to false in Vue instance
+            },
+            clearCommentInput: function () {
+                this.comment = "";
+                this.name = "";
             },
             deleteClick: function (e) {
                 e.preventDefault();
@@ -188,9 +194,17 @@
                     var newImg = resp.data.image;
                     console.log("newImg", newImg);
                     that.images.unshift(newImg);
+                }).then(function () {
+                    that.clearInput();
                 }).catch(function (err) {
                     console.log("error in axios post", err);
                 });
+            },
+            clearInput: function () {
+                this.title = "";
+                this.description = "";
+                this.username = "";
+                this.file = null;
             },
             handleChange: function (e) {
 
