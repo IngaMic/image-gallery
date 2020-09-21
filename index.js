@@ -71,7 +71,6 @@ app.get("/images/:imageId", (req, res) => {
                 img,
                 comments,
             });
-
         }).catch((err) => { console.log("err in getComments get /img", err) });
     }).catch((err) => {
         console.log("err in getImg get /img", err);

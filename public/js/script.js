@@ -36,6 +36,8 @@
                 that.username = image.username;
                 that.description = image.description;
                 that.comments = comments;
+                //that.prev = image.prev;
+                //that.next = image.next;
             }).catch(function (err) {
                 console.log("error in axios GET images/id", err);
                 that.$emit("close");
@@ -45,15 +47,8 @@
             imageId: function () {
                 //exactly the same that mounted does: when id changes image and comments changes
                 var that = this;
-
-
-                // if (imageId != that.images.id) {
-                //     that.$emit("close");
-                // }
-
-
                 axios.get("/images/" + that.imageId).then(function (resp) {
-                    console.log("response from post image", resp);
+                    // console.log("response from post image", resp);
 
                     //..if theres nothing with that this.id, just close the Modal
                     //if it's an err, u can handle that in your catches
@@ -77,6 +72,8 @@
                     that.username = image.username;
                     that.description = image.description;
                     that.comments = comments;
+                    // that.prev = image.prev;
+                    // that.next = image.next;
                     //console.log("that here", that);
                 }).catch(function (err) {
                     //console.log("response from post image in catch", resp);
@@ -124,6 +121,12 @@
                     console.log("error in axios post delete in script.js", err);
                 });
             }
+            // prevImg: function(){
+
+            // }
+            // nextImg: function () {
+
+            // }
         },
     });
 

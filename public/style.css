@@ -10,6 +10,25 @@ main {
     margin: 0 auto;
     grid-gap: 5px;
 }
+.polaroid img {
+  
+  margin-bottom: 80px;
+}
+.polaroid {
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+    color: rgb(75, 71, 71);
+   border: 0px solid black;
+  border-radius: 5px;
+  width: 50%;
+ float: left;
+ background-color: ivory;
+ margin-left: 20px;
+}
+.textdiv {
+ float: right;
+ width: 35%;
+ margin-right: 20px;
+}
 .card {
     display: flex;
     flex-direction: column;
@@ -23,11 +42,35 @@ main {
     margin: 15px 10px;
     border-radius: 5px;
 }
+.one {
+  float: left;
+  margin-bottom: 20px;
+}
+.two {
+  float: right;
+  border: 2px solid black;
+  border-radius: 5px;
+  font-size: 20px;
+  margin-top: 45px;
+  margin-right: 42px;
+  max-width:38%;
+
+}
 img {
+   object-fit: cover;
     margin-top: 15px;
-    max-width: 90%;
+    width: 90%;
+    height: 350px;
     overflow: hidden;
     border-radius: 5px;
+}
+h1 {
+  font-size: 70px;
+  font-family: 'Libre Barcode 39 Extended Text', cursive;
+  color: #2C3539;
+  margin-left: 35px;
+  max-width: 38%;
+ /* font-family: 'Blackout Two AM'; */
 }
 
 @media only screen and (max-width: 450px) {
@@ -39,14 +82,38 @@ img {
   .container {
     grid-template-columns: 1fr 1fr;
   }  
-  card {
+  .card {
     width: 96%;
   }
 }
+.first p, h4, li {
+  color: rgb(20, 20, 19);
+padding: 2px;
 
+}
+.first h4 {
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
 .card:hover {
     top: -2px;
+    box-shadow: 0 8px 9px rgba(0, 0, 0, 0.2);
+}
+.polaroid:hover {
+    top: -2px;
     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+.first .hand {
+  color: rgb(32, 32, 31);
+}
+.hand {
+font-family: 'Permanent Marker', cursive;
+ font-size: 22px;
+
+font-weight:normal;
+}
+a {
+   text-decoration: none;
 }
 input {
   border-radius: 5px;
@@ -63,15 +130,45 @@ li {
 }
 .first {
     padding-top: 15px;
-    height: auto;
-    width: 400px;
-    background-color: #f5e7c5;
-    left: 200px;
-    top: 50px;
+    height: 90%;
+    width: 80%;
+    background-color: rgb(243, 243, 243);
+    left: 150px;
+    top: 30px;
     position: fixed;
     text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+.first img {
+  height: 500px;
+}
+#lower {
+ margin-top: 50px;
+}
+#more {
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgb(243, 243, 243) ;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 #x {
   float: right;
   margin: 10px;
 }
+
+/* Blackout Two AM */
+/* @font-face {
+    font-family: 'Blackout Two AM';
+    src: url('/public/font/blackout-master/blackout-master/source/blackout_two_am.ufo');
+     src: 
+    url("/public/font/blackout-master/blackout-master/webfonts/blackout_two_am-webfont.eot?#iefix") format('embedded-opentype'),
+      url('/public/font/blackout-master/blackout-master/webfonts/blackout_two_am-webfont.woff') format('woff'), 
+         url('/mnt/c/Users/inger/board/cumin-imageboard/public/font/blackout-master/Blackoutgood.ttf') format('truetype'),
+         url('/public/font/blackout-master/blackout-master/webfonts/blackout_two_am-webfont.svg#BlackoutTwoAM') format('svg'); 
+    font-weight: normal;
+    font-style: normal;
+}  */
+

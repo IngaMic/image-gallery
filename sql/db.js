@@ -43,10 +43,16 @@ module.exports.addComment = (comment, username, image_id) => {
 };
 module.exports.getImg = (id) => {
     return db.query(`
-        SELECT * FROM images
+        SELECT * 
+        FROM images
         WHERE id = ($1)`, [id]
     );
 };
+// (SELECT id FROM images WHERE id < ($1)
+//   ORDER BY id DESC LIMIT 1) AS prev
+// (SELECT id FROM images WHERE id > ($1)
+//   ORDER BY id ASC LIMIT 1) AS next
+
 module.exports.getComments = (id) => {
     return db.query(`
         SELECT * FROM comments

@@ -3,27 +3,34 @@
 
 <head>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
     <title></title>
 </head>
 
 <body>
-    <h1>Imagge</h1>
-    <h2>Latest Images</h2>
     <main>
-        <form>
-            <input v-model="title" type="text" name="title" placeholder="title">
-            <input v-model="description" type="text" name="description" placeholder="description">
-            <input v-model="username" type="text" name="username" placeholder="username">
-            <input @change="handleChange" type="file" name="file" accept="image/*">
-            <button @click="handleClick">Submit</button>
-        </form>
+        <div class="one">
+            <h1>Mashines</h1>
+        </div>
+
+        <div class="two">
+            <form>
+                <input v-model="title" type="text" name="title" placeholder="title">
+                <input v-model="description" type="text" name="description" placeholder="description">
+                <input v-model="username" type="text" name="username" placeholder="username">
+                <input @change="handleChange" type="file" name="file" accept="image/*">
+                <button @click="handleClick">Submit</button>
+            </form>
+        </div>
         <!-- <div > -->
+        <!-- v-slide-group            goes under-->
         <div class="container" v-if="images.length > 0">
             <div class="card" v-for="image in images">
                 <a :href="'#'+image.id">
                     <img :src="image.url">
-                    <p> {{image.title}}</p>
-                    <p> {{image.id}}</p>
+                    <p class="hand"> {{image.title}}</p>
+
                 </a>
             </div>
         </div>
@@ -43,20 +50,32 @@
             <div id="x">
             <button @click="closeClick">X</button> 
             </div>
-             <img :src="url">
-                <p> {{title}}</p>
+            <div class="slider-links">
+<!-- <div class="prev">
+<a :href="'#' + prev" ><</a>
+</div>  -->
+            
+<div class="polaroid">
+       <img :src="url">
+</div>
+<div class="textdiv">
+                <p class="hand"> {{title}}</p>
                 <ul v-if="comments.length > 0">
-                    <li v-for="message in comments" >{{message.comment}} {{message.username}}</li>
+                    <li v-for="message in comments" >{{message.comment}} - <strong>{{message.username}}</strong></li>
                 </ul>
                  <p v-else>no comments yet</p>
-
-            <h5>Leave a comment:</h5>
+<div id="lower">
+            <h4>Leave a comment:</h4>
             <input v-model="comment" type="text" name="comment" placeholder="comment" required>
             <input v-model="name" type="text" name="name" placeholder="name" required>
             <button @click="handleClick">Submit</button>
-
-
-  <button @click="deleteClick">Delete this Picture</button>
+            <button  @click="deleteClick">Don't like it? Delete this Picture</button>
+<!--<div class="next">
+    <a :href="'#' + next">></a>
+    </div> -->
+  </div>          
+   </div>         
+        </div>
         </div> 
     </script>
 
