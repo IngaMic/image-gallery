@@ -6,7 +6,7 @@ Users can upload pictures, comment on individual images, delete from the gallery
 </br>
 </br>
 <kbd>
-[![SC2 Video](image-gallery.gif)](https://youtu.be/4vcI8dj3NI8 "Click to Watch a Small Demo!")
+[![short demo](image-gallery.gif)](https://youtu.be/4vcI8dj3NI8 "Click to Watch a Small Demo!")
 </kbd>
 </br>
 </br>
